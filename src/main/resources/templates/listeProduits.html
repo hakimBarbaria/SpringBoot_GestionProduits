@@ -9,6 +9,10 @@ href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <head>
 <meta charset="utf-8">
 <title>Liste des Produits</title>
+
+<link rel="stylesheet" 
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
 </head>
 <body>
 <div layout:fragment="Mycontent">
@@ -16,7 +20,7 @@ href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <div class="container">
 <div class="card">
  <div class="card-header font-weight-bold text-primary">
- <u>Liste des Produits</u>
+ <u>Liste des Produits</u><i class="bi bi-basket-fill"></i>
  </div>
  <div class="card-body">
  <table class="table table-striped">
@@ -29,10 +33,10 @@ href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
  <td th:text="${p.prixProduit}"></td>
  <td><a class="btn btn-danger" onclick="return confirm('Etes vous sûr ?')"
  th:href="@{supprimerProduit(id=${p.idProduit},
-page=${currentPage},size=${size})}">Supprimer</a></td>
+page=${currentPage},size=${size})}"><i class="bi bi-trash3"></i></a></td>
 <td><a class="btn btn-warning" onclick="return confirm('Etes vous sûr ?')"
  th:href="@{modifierProduit(id=${p.idProduit},
-page=${currentPage},size=${size})}">Editer</a></td>
+page=${currentPage},size=${size})}"><i class="bi bi-pen"></i></a></td>
  </tr>
  </table>
  <ul class="nav nav-pills">

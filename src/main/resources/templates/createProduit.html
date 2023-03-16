@@ -8,12 +8,17 @@ href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <head>
 <meta charset="utf-8">
 <title>Create produit</title>
+
+<link rel="stylesheet" 
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
 </head>
 <body>
 <div layout:fragment="Mycontent">
 <div class="container">
 <div class="card-body">
-<u><h2 class="text-center font-weight-bold text-primary">Ajouter Produit</h2></u>
+<u><h2 class="text-center font-weight-bold text-primary">Ajouter Produit <i class="bi bi-bag-plus"></i>
+</h2></u>
 <form action="saveProduit" method="post">
 <div class="form-group">
 <label class="control-label font-weight-bolder">Nom Produit :</label>
@@ -35,7 +40,7 @@ href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <div th:if="${msg}" class="p-3 mb-2 bg-success text-white"><p th:text="'Message: '+${msg}"/></div>
 <br/>
 <a href="ListeProduits" class="blockquote-footer font-weight-bolder display-1 text-success">
-Liste Produits</a>
+<i class="bi bi-bag-fill"></i> Liste Produits</a>
 </div>
 </div>
 </body>
