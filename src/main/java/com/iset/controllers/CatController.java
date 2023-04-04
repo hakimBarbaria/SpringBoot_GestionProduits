@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,6 +23,7 @@ public class CatController {
 	@Autowired
 	private ProduitService produitService;
 
+	
 	
 	@RequestMapping("/showCreate")
 	public String showCreate() {
@@ -103,6 +105,16 @@ public class CatController {
 	    return "listeProduits";
 	}
 	
-
+	@PostMapping("/filter")
+	public String filterProduit(
+			ModelMap modelMap,
+			@RequestParam("nomProduit") String nomProduit)
+			{
+			 List<Produit> prods = produitService.findByNomProduit(nomProduit);
+			modelMap.addAttribute("produits", prods);
+			
+			return "listeProduits";
+		} 
+	
 }
 

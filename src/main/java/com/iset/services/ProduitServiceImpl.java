@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.iset.dao.ProduitRepository;
+import com.iset.entities.Categorie;
 import com.iset.entities.Produit;
 
 @Service
@@ -46,4 +47,33 @@ public Page<Produit> getAllProduitsParPage(int page, int size) {
  // TODO Auto-generated method stub
  return produitRepository.findAll(PageRequest.of(page, size));
  }
+
+
+public List<Produit> findByNomProduit(String nom) {
+	return produitRepository.findByNomProduit(nom);
+}
+
+public List<Produit> findByNomProduitContains(String nom) {
+	return produitRepository.findByNomProduitContains(nom);
+}
+
+public List<Produit> findByNomPrix (String nom, Double prix) {
+	return produitRepository.findByNomPrix(nom, prix);
+}
+public List<Produit> findByCategorie (Categorie categorie) {
+	return produitRepository.findByCategorie(categorie);
+}
+
+public List<Produit> findByCategorieIdCat(Long id) {
+	return produitRepository.findByCategorieIdCat(id);
+}
+
+public List<Produit> findByOrderByNomProduitAsc() {
+	return produitRepository.findByOrderByNomProduitAsc();
+}
+
+public List<Produit> trierProduitsNomsPrix() {
+	return produitRepository.trierProduitsNomsPrix();
+}
+
 }
