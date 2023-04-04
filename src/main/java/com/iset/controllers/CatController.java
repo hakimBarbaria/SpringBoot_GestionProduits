@@ -111,7 +111,11 @@ public class CatController {
 			@RequestParam("nomProduit") String nomProduit)
 			{
 			 List<Produit> prods = produitService.findByNomProduit(nomProduit);
-			modelMap.addAttribute("produits", prods);
+			 if(prods.isEmpty()) {
+				 modelMap.addAttribute("msg","Vous n'avez pas du produit avec ce nom !");
+			 }else {
+				 modelMap.addAttribute("produits", prods);
+			 }
 			
 			return "listeProduits";
 		} 

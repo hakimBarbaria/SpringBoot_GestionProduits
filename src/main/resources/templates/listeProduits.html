@@ -75,6 +75,8 @@ page=${currentPage},size=${size})}"><i class="bi bi-pen"></i></a>
 </td>
  </tr>
  </table>
+ <div class="alert alert-danger text-center" role="alert" th:text="${msg}" th:if="${msg}">
+</div>
  <ul class="nav nav-pills">
  <li th:each="page,status:${pages}">
  <a th:class="${status.index==currentPage?'btn btn-primary':'btn'
