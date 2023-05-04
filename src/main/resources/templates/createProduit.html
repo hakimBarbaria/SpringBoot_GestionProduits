@@ -23,16 +23,42 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
 <form action="saveProduit" method="post">
 <div class="form-group">
 <label class="control-label font-weight-bolder">Nom Produit :</label>
-<input type="text" name="nomProduit" class="form-control" placeholder="Entrer un nom du produit"/>
+<input type="text" name="nomProduit" class="form-control" placeholder="Entrer un nom du produit" th:value="${produit.nomProduit}"/>
+<span th:errors=${produit.nomProduit} class="text-danger"> </span>
 </div>
 <div class="form-group">
 <label class="control-label font-weight-bolder">Prix Produit :</label>
-<input type="text" name="prixProduit" class="form-control" placeholder="Entrer le prix du produit"/>
+<input type="text" name="prixProduit" class="form-control"
+th:value="${produit.prixProduit}" />
+<span th:errors=${produit.prixProduit} class="text-danger"> </span>
 </div>
 <div class="form-group">
 <label class="control-label font-weight-bolder">Date création :</label>
-<input type="date" name="date" class="form-control"/>
+<input type="date" name="dateCreation" class="form-control"
+th:value="${produit.dateCreation}"/>
+<span th:errors=${produit.dateCreation} class="text-danger"> </span> 
 </div>
+
+<div class="form-group">
+    <label class="control-label font-weight-bolder">Categories :</label>
+    
+    <div class="row">
+    <div class="col-sm-1"><a href="createCategory"><button type="button" class="btn btn-light"><i class="bi bi-plus-lg"></i>
+    </button></a></div>
+    <div class="col-sm-11">
+    	 <select class="form-control" id="exampleFormControlSelect1">
+      <option disabled selected>Choisir une categorie</option>
+      <th:block th:each="cats:${cats}">
+      <option th:text="${cats.nomCat}"></option>
+      </th:block>
+    </select>
+    </div>
+  </div>
+  
+  
+   
+  </div>
+  
 <div>
 <button type="submit" class="btn btn-primary">Ajouter</button>
 </div>
@@ -40,8 +66,19 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
 </div>
 <div th:if="${msg}" class="p-3 mb-2 bg-success text-white"><p th:text="'Message: '+${msg}"/></div>
 <br/>
-<a href="ListeProduits" class="blockquote-footer font-weight-bolder display-1 text-success">
+
+<div class="row">
+    <div class="col">
+       <a href="ListeProduits" class="blockquote-footer font-weight-bolder display-1 text-success">
 <i class="bi bi-bag-fill"></i> Liste Produits</a>
+</div>
+ <div class="col-sm">
+       <a href="listeCategories" class="blockquote-footer font-weight-bolder display-1 text-success">
+<i class="bi bi-bag-fill"></i> Liste Categories</a>
+</div>
+    </div>
+   </div>
+   
 </div>
 </div>
 </body>

@@ -5,16 +5,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.iset.entities.Categorie;
 import com.iset.entities.Produit;
+import com.iset.services.CategoryService;
 import com.iset.services.ProduitService;
 
 @Controller
@@ -23,28 +28,54 @@ public class CatController {
 	@Autowired
 	private ProduitService produitService;
 
+	@Autowired
+	private CategoryService categoryService;
 	
+	@RequestMapping("/createCategory")
+	public String createCategory(ModelMap modelMap) {
+		modelMap.addAttribute("category", new Categorie());
+		return "createCategory";  
+	}
+	
+	@RequestMapping("/saveCategory")
+	public String saveCategory( @Valid Categorie category,
+			 BindingResult bindingResult,
+			ModelMap modelMap
+		   ) throws ParseException {
+
+		if (bindingResult.hasErrors()) {
+			   return "createCategory";
+			 }
+		
+		Categorie savedCategory = categoryService.saveCategorie(category);
+		
+		String msg = "categorie enregistré avec Id " + savedCategory.getIdCat();
+		modelMap.addAttribute("msg", msg);
+
+		return "createCategory";
+	}
 	
 	@RequestMapping("/showCreate")
-	public String showCreate() {
-		return "createProduit";
+	public String showCreate(ModelMap modelMap) {
+		 List<Categorie> cats = categoryService.getAllCategories();
+		modelMap.addAttribute("cats", cats);
+		modelMap.addAttribute("produit", new Produit());
+		return "createProduit";  
 	}
 
 	@RequestMapping("/saveProduit")
-	public String saveProduit(@ModelAttribute("produit") Produit produit, @RequestParam("date") String date,
-			ModelMap modelMap) throws ParseException {
-
-		// conversion de la date
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateCreation = dateFormat.parse(date);
-		produit.setDateCreation(dateCreation);
-
-		Produit savedProduit = produitService.saveProduit(produit);
-		String msg = "Produit enregistré avec Id " + savedProduit.getIdProduit();
-		modelMap.addAttribute("msg", msg);
-
-		return "createProduit";
-	}
+	public String saveProduit(@Valid Produit produit,
+	 BindingResult bindingResult,
+	 ModelMap modelMap) {
+	 if (bindingResult.hasErrors()) {
+	   return "createProduit";
+	 }
+	 Produit saveProduit = produitService.saveProduit(produit);
+	 String msg = "produit enregistré avec Id " +
+	saveProduit.getIdProduit();
+	 modelMap.addAttribute("msg", msg);
+	 return "createProduit";
+	 } 
 
 	@RequestMapping("/ListeProduits")
 	public String listeProduits(
@@ -104,6 +135,13 @@ public class CatController {
 
 	    return "listeProduits";
 	}
+	@RequestMapping("listeCategories")
+	public String listeCategories(ModelMap modelMap) {
+		List<Categorie> categories = categoryService.getAllCategories();
+		modelMap.addAttribute("categories", categories);
+		return "listeCategories";
+	}
+	
 	
 	@PostMapping("/filter")
 	public String filterProduit(

@@ -7,13 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 @Entity
 public class Categorie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idCat; 
+	private Long idCat;
+	@NotNull
+	@Size (min = 4,max = 15)
 	private String nomCat; 
+	@NotNull
+	@Size (min = 20,max = 100)
 	private String descriptionCat;
 	@OneToMany(mappedBy = "categorie")
 	private List<Produit> produits;

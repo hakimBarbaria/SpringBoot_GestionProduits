@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="template">
+
+<link rel="stylesheet" type="text/css"
+href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<head>
+<meta charset="utf-8">
+<title>Modifier produit</title>
+
+<link rel="stylesheet" 
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+</head>
+<body>
+<div layout:fragment="Mycontent">
+<div class="container">
+<div class="card-body">
+<u><h2 class="text-center font-weight-bold text-primary">Modifier Produit <i class="bi bi-pen"></i>
+</h2></u>
+<form action="updateProduit" method="post">
+<div class="form-group">
+<label class="control-label font-weight-bolder">Id Produit :</label>
+<input type="text" name="idProduit" class="form-control" th:value="${produit.idProduit}" readonly/>
+<label class="control-label font-weight-bolder">Nom Produit :</label>
+<input type="text" name="nomProduit" class="form-control" th:value="${produit.nomProduit}"/>
+</div>
+<div class="form-group">
+<label class="control-label font-weight-bolder">Prix Produit :</label>
+<input type="text" name="prixProduit" class="form-control" th:value="${produit.prixProduit}"/>
+</div>
+<div class="form-group">
+<label class="control-label font-weight-bolder">Date création :</label>
+
+<input class="form-control" type="date" name="date" 
+th:value="${#dates.format(produit.dateCreation, 'yyyy-MM-dd')}" />
+
+</div>
+<div>
+<button type="submit" class="btn btn-primary">Modifier</button>
+</div>
+</form>
+</div>
+<br/>
+<a href="ListeProduits" class="blockquote-footer font-weight-bolder display-1 text-success">
+<i class="bi bi-bag-fill"></i> Liste Produits</a>
+</div>
+</div>
+</body>
+</html>
