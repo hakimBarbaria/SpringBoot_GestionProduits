@@ -35,7 +35,7 @@ public class Produit {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@PastOrPresent
 	private Date dateCreation;
-	 @ManyToOne(cascade = CascadeType.REMOVE)
+	 @ManyToOne()
 	    private Categorie categorie;
 	
 	public Categorie getCategorie() {

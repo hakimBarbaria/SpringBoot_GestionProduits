@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService{
 		return categoryRepository.save(cat);
 	}
 	@Override
-	public void deleteProduitById(Long id) {
+	public void deleteCategorieById(Long id) {
 		categoryRepository.deleteById(id); 
 		
 	}

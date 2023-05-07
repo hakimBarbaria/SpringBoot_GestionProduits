@@ -16,7 +16,7 @@ public interface CategoryService {
 	 Categorie getCategorie(Long id);
 	 Categorie updateCat(Categorie cat); 
 	 
-	 void deleteProduitById(Long id); 
+	 void deleteCategorieById(Long id); 
 	 
 	 List<Categorie> findByNomCategorie(String nom);
 }
