@@ -2,6 +2,7 @@ package com.iset.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,13 +16,13 @@ public class Categorie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCat;
-	@NotNull
-	@Size (min = 4,max = 15)
+	/*@NotNull
+	@Size (min = 4,max = 15)*/
 	private String nomCat; 
-	@NotNull
-	@Size (min = 20,max = 100)
+/*	@NotNull
+	@Size (min = 20,max = 100)*/
 	private String descriptionCat;
-	@OneToMany(mappedBy = "categorie")
+	@OneToMany(mappedBy = "categorie",cascade = CascadeType.REMOVE )
 	private List<Produit> produits;
 	public Categorie() {
 	}

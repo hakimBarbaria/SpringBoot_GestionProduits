@@ -29,8 +29,8 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
   </div>
 	 <div class="col-sm">
 		 <form class="form-inline my-2 my-lg-0" action="filter" method="post">
-		      <input class="form-control mr-sm-2" type="search" placeholder="Filtrer avec Nom" aria-label="Search" name="nomProduit">
-		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filtrer</button>
+		      <input class="form-control mr-sm-2" type="search" placeholder="chercher avec Nom" aria-label="Search" name="nomProduit">
+		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
 		  </form>
 	 </div>
  </div>
@@ -38,12 +38,14 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
  <div class="card-body">
  <table class="table table-striped">
  <tr>
- <th>#</th><th>Nom Produit</th><th>Prix</th><th class="text-right">Actions</th><th></th>
+ <th>#</th><th>Nom Produit</th><th>Prix</th><th>Category</th><th class="text-right">Actions</th><th></th>
  </tr>
  <tr th:each="p:${produits}">
  <td th:text="${p.idProduit}"></td>
  <td th:text="${p.nomProduit}"></td>
  <td th:text="${p.prixProduit}"></td>
+ <td th:text="${p.categorie.nomCat}"></td>
+ <!-- <td th:text="${p.categorie.nomCat}"></td> -->
  <td><a class="btn btn-danger" onclick="return confirm('Etes vous sûr ?')"
  th:href="@{supprimerProduit(id=${p.idProduit},
 page=${currentPage},size=${size})}"><i class="bi bi-trash3"></i></a></td>

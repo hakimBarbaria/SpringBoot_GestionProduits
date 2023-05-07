@@ -7,8 +7,9 @@
 href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <head>
 <meta charset="utf-8">
-<title>Create category</title>
+<title th:if="${cat.idCat} == null">Create category</title>
 
+<title th:if="${cat.idCat} != null">Update category</title>
 
 <link rel="stylesheet" 
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -18,27 +19,45 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
 <div layout:fragment="Mycontent">
 <div class="container">
 <div class="card-body">
-<u><h2 class="text-center font-weight-bold text-primary">Ajouter Category <i class="bi bi-bag-plus"></i>
+
+<div th:if="${cat.idCat} == null">
+    <u><h2 class="text-center font-weight-bold text-primary">Ajouter Category <i class="bi bi-bag-plus"></i></h2></u>
+</div>
+
+<div th:if="${cat.idCat} != null">
+    <u><h2 class="text-center font-weight-bold text-primary">Modifier Category <i class="bi bi-bag-plus"></i></h2></u>
+</div>
+
+
 </h2></u>
-<form action="saveCategory" method="post">
+<form th:action="${(cat.nomCat == null) ? 'saveCategory' : 'updateCategory'}" method="post">
 <div class="form-group">
+ <input type="hidden" name="idCat" class="form-control" placeholder="Entrer un nom du categorie" th:value="${cat.idCat}"/>
+
   <label class="control-label font-weight-bolder">Nom Category :</label>
-  <input type="text" name="nomCat" class="form-control" placeholder="Entrer un nom du categorie"/>
+  <input type="text" name="nomCat" class="form-control" placeholder="Entrer un nom du categorie" th:value="${cat.nomCat}"/>
 <!-- <span th:errors="${category.nomCat}" class="text-danger"> </span> th:value="${category.nomCat}" -->
 </div>
 
 
 <div class="mb-3">
     <label class="control-label font-weight-bolder">Description :</label>
-    <textarea name="descriptionCat" class="form-control" rows="7" placeholder="Entrer une description du categorie"></textarea>
+    <textarea name="descriptionCat" class="form-control" rows="7" placeholder="Entrer une description du categorie" th:text="${cat.descriptionCat}" th:value="${cat.descriptionCat}">
+    </textarea>
     <div class="invalid-feedback">
       Please enter a message in the textarea.
     </div>
   <!--   <span th:errors="${category.descriptionCat}" class="text-danger"> </span> th:value="${category.descriptionCat}" -->
   </div>
 <div>
-
+<div th:if="${cat.idCat} == null">
 <button type="submit" class="btn btn-primary">Ajouter</button>
+</div>
+
+<div th:if="${cat.idCat} != null">
+<button type="submit" class="btn btn-primary">Modifier</button>
+</div>
+
 </div>
 </form>
 </div>

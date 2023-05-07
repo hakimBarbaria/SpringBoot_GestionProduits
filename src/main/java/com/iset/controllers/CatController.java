@@ -33,26 +33,22 @@ public class CatController {
 	
 	@RequestMapping("/createCategory")
 	public String createCategory(ModelMap modelMap) {
-		modelMap.addAttribute("category", new Categorie());
+		modelMap.addAttribute("cat", new Categorie());
 		return "createCategory";  
 	}
 	
 	@RequestMapping("/saveCategory")
-	public String saveCategory( @Valid Categorie category,
-			 BindingResult bindingResult,
+	public String saveCategory(Categorie cat,
 			ModelMap modelMap
 		   ) throws ParseException {
-
-		if (bindingResult.hasErrors()) {
-			   return "createCategory";
-			 }
 		
-		Categorie savedCategory = categoryService.saveCategorie(category);
+		Categorie savedCategory = categoryService.saveCategorie(cat);
 		
 		String msg = "categorie enregistré avec Id " + savedCategory.getIdCat();
 		modelMap.addAttribute("msg", msg);
 
-		return "createCategory";
+		return "redirect:/listeCategories";
+
 	}
 	
 	@RequestMapping("/showCreate")
@@ -67,9 +63,7 @@ public class CatController {
 	public String saveProduit(@Valid Produit produit,
 	 BindingResult bindingResult,
 	 ModelMap modelMap) {
-	 if (bindingResult.hasErrors()) {
-	   return "createProduit";
-	 }
+
 	 Produit saveProduit = produitService.saveProduit(produit);
 	 String msg = "produit enregistré avec Id " +
 	saveProduit.getIdProduit();
@@ -83,10 +77,12 @@ public class CatController {
 	@RequestParam(name = "page", defaultValue = "0") int page,
 	@RequestParam(name = "size", defaultValue = "2") int size)
 	{
+	List<Categorie> categories = categoryService.getAllCategories();
 	 Page<Produit> prods = produitService.getAllProduitsParPage(page, size);
 	modelMap.addAttribute("produits", prods);
 	modelMap.addAttribute("pages", new int[prods.getTotalPages()]);
 	modelMap.addAttribute("currentPage", page);
+	  modelMap.addAttribute("categories", categories);
 	return "listeProduits";
 	} 
 
@@ -105,6 +101,14 @@ public class CatController {
 	 return "listeProduits";
 	 }
 
+	
+	
+	@RequestMapping("/supprimerCat")
+	public String supprimerCat(@RequestParam("id") Long id) {
+	 categoryService.deleteProduitById(id);
+	 return "redirect:/listeCategories";
+	 }
+
 	@RequestMapping("/modifierProduit")
 	public String editerProduit(@RequestParam("id") Long id, ModelMap modelMap,
 	                             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -113,11 +117,23 @@ public class CatController {
 	    modelMap.addAttribute("produit", p);
 	    modelMap.addAttribute("currentPage", page);
 	    modelMap.addAttribute("size", size);
-	    return "editerProduits";
+	    List<Categorie> cats = categoryService.getAllCategories();
+		modelMap.addAttribute("cats", cats);
+	    return "createProduit";
 	}
+	
+	
+	@RequestMapping("/modifierCategory")
+	public String editerCat(@RequestParam("id") Long id, ModelMap modelMap
+	                             ) {
+	    Categorie cat = categoryService.getCategorie(id);
+	    modelMap.addAttribute("cat", cat);
+	    return "createCategory";
+	}
+	
 	@RequestMapping("/updateProduit")
 	public String updateProduit(@ModelAttribute("produit") Produit produit,
-	                             @RequestParam("date") String date,
+	                             @RequestParam("dateCreation") String date,
 	                             ModelMap modelMap,
 	                             @RequestParam(name = "page", defaultValue = "0") int page,
 	                             @RequestParam(name = "size", defaultValue = "2") int size) throws ParseException {
@@ -133,12 +149,33 @@ public class CatController {
 	    modelMap.addAttribute("currentPage", page);
 	    modelMap.addAttribute("size", size);
 
-	    return "listeProduits";
+	    return "redirect:/listeProduits";
 	}
+	
+	
+	
+	
+	@RequestMapping("/updateCategory")
+	public String updateCat(@ModelAttribute("cat") Categorie updatedCat) {
+		if (updatedCat == null) {
+			return "listeProduits";
+		}
+	    Categorie originalCat = categoryService.getCategorie(updatedCat.getIdCat());
+	    originalCat.setIdCat(updatedCat.getIdCat());
+	    originalCat.setNomCat(updatedCat.getNomCat());
+	    originalCat.setDescriptionCat(updatedCat.getDescriptionCat());
+	    categoryService.updateCat(originalCat);
+	    return "redirect:/listeCategories";
+	}
+
 	@RequestMapping("listeCategories")
-	public String listeCategories(ModelMap modelMap) {
-		List<Categorie> categories = categoryService.getAllCategories();
-		modelMap.addAttribute("categories", categories);
+	public String listeCategories(ModelMap modelMap,@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "3") int size) {
+		 Page<Categorie> cats = categoryService.getAllCategoriesParPages(page, size);
+		modelMap.addAttribute("categories", cats);
+		 modelMap.addAttribute("pages", new int[cats.getTotalPages()]);
+		    modelMap.addAttribute("currentPage", page);
+		    modelMap.addAttribute("size", size);
 		return "listeCategories";
 	}
 	
@@ -156,6 +193,21 @@ public class CatController {
 			 }
 			
 			return "listeProduits";
+		} 
+	
+	@PostMapping("/filterWithCat")
+	public String filterCat(
+			ModelMap modelMap,
+			@RequestParam("nomCat") String nomCat)
+			{
+			 List<Categorie> cats = categoryService.findByNomCategorie(nomCat);
+			 if(cats.isEmpty()) {
+				 modelMap.addAttribute("msg","Vous n'avez pas du produit avec ce nom !");
+			 }else {
+				 modelMap.addAttribute("categories", cats);
+			 }
+			
+			return "listeCategories";
 		} 
 	
 }
