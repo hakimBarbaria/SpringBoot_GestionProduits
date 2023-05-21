@@ -8,7 +8,7 @@ import com.iset.entities.Categorie;
 import com.iset.entities.Produit;
 
 public interface ProduitService { 
-	 Produit saveProduit(Produit p); 
+	 public Produit saveProduit(Produit produit);
 	 Produit updateProduit(Produit p); 
 	void deleteProduit(Produit p); 
 	void deleteProduitById(Long id); 

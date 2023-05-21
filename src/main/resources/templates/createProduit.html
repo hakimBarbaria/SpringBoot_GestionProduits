@@ -8,6 +8,7 @@
     <title>Create produit</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -21,7 +22,15 @@
 <div th:if="${produit.idProduit} != null">
     <u><h2 class="text-center font-weight-bold text-primary">Modifier Produit <i class="bi bi-bag-plus"></i></h2></u>
 </div>
-                <form th:action="${(produit.idProduit == null) ? 'saveProduit' : 'updateProduit'}" method="post">
+<br>
+<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${message}">
+  <strong>Bon ,</strong> <p th:text="${message}"></p>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+                <form th:action="${(produit.idProduit == null) ? 'saveProduit' : 'updateProduit'}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="idProduit" class="form-control" placeholder="Entrer un nom du categorie" th:value="${produit.idProduit}"/>
                     <div class="form-group">
                         <label class="control-label font-weight-bolder" for="nomProduit">Nom Produit :</label>
@@ -33,11 +42,13 @@
                         <input type="text" id="prixProduit" name="prixProduit" class="form-control" th:value="${produit.prixProduit}" />
                         <span th:errors="${produit.prixProduit}" class="text-danger"></span>
                     </div>
+                    
                     <div class="form-group">
                         <label class="control-label font-weight-bolder" for="dateCreation">Date création :</label>
                         <input type="date" id="dateCreation" name="dateCreation" class="form-control" th:value="${produit.dateCreation}" />
                         <span th:errors="${produit.dateCreation}" class="text-danger"></span> 
                     </div>
+
                     <div class="form-group">
                         <label class="control-label font-weight-bolder" for="categorie">Categories :</label>
                         <div class="row">

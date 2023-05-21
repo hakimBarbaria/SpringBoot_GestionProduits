@@ -1,5 +1,10 @@
 package com.iset.controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,13 +14,17 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.iset.entities.Categorie;
 import com.iset.entities.Produit;
@@ -30,48 +39,51 @@ public class CatController {
 
 	@Autowired
 	private CategoryService categoryService;
-	
+
+	@RequestMapping("/")
+	public String redirectToLandingPage() {
+		return "Acceuille";
+	}
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/createCategory")
 	public String createCategory(ModelMap modelMap) {
 		modelMap.addAttribute("cat", new Categorie());
-		return "createCategory";  
+		return "createCategory";
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/saveCategory")
-	public String saveCategory(Categorie cat,
-			ModelMap modelMap
-		   ) throws ParseException {
-		
+	public String saveCategory(Categorie cat, ModelMap modelMap) throws ParseException {
+
 		Categorie savedCategory = categoryService.saveCategorie(cat);
-		
-		String msg = "categorie enregistré avec Id " + savedCategory.getIdCat();
+
+		String msg = "Catégorie enregistrée avec l'ID " + savedCategory.getIdCat();
 		modelMap.addAttribute("msg", msg);
 
 		return "redirect:/listeCategories";
 
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/showCreate")
 	public String showCreate(ModelMap modelMap) {
-		 List<Categorie> cats = categoryService.getAllCategories();
+		List<Categorie> cats = categoryService.getAllCategories();
 		modelMap.addAttribute("cats", cats);
 		modelMap.addAttribute("produit", new Produit());
-		return "createProduit";  
+		return "createProduit";
 	}
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
+	@RequestMapping(value = "/saveProduit", method = RequestMethod.POST)
+	public String saveProduit(@Valid Produit produit, BindingResult bindingResult,
+	                          ModelMap modelMap) {
 
-	@RequestMapping("/saveProduit")
-	public String saveProduit(@Valid Produit produit,
-	 BindingResult bindingResult,
-	 ModelMap modelMap) {
 
-	 Produit saveProduit = produitService.saveProduit(produit);
-	 String msg = "produit enregistré avec Id " +
-	saveProduit.getIdProduit();
-	 modelMap.addAttribute("msg", msg);
-	 return "createProduit";
-	 } 
+	    	    Produit savedProduit = produitService.saveProduit(produit);
+	    String msg = "Produit enregistré avec l'ID " + savedProduit.getIdProduit();
+	    modelMap.addAttribute("msg", msg);
 
-	@RequestMapping("/ListeProduits")
+	    return "createProduit";
+	}
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER')")
+	@GetMapping("/ListeProduits")
 	public String listeProduits(
 	ModelMap modelMap,
 	@RequestParam(name = "page", defaultValue = "0") int page,
@@ -85,7 +97,7 @@ public class CatController {
 	  modelMap.addAttribute("categories", categories);
 	return "listeProduits";
 	} 
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/supprimerProduit")
 	public String supprimerProduit(@RequestParam("id") Long id) {
 	 produitService.deleteProduitById(id);
@@ -93,13 +105,13 @@ public class CatController {
 	 }
 
 	
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/supprimerCat")
 	public String supprimerCat(@RequestParam("id") Long id) {
 	 categoryService.deleteCategorieById(id);;
 	 return "redirect:/listeCategories";
 	 }
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/modifierProduit")
 	public String editerProduit(@RequestParam("id") Long id, ModelMap modelMap,
 	                             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -113,7 +125,7 @@ public class CatController {
 	    return "createProduit";
 	}
 	
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/modifierCategory")
 	public String editerCat(@RequestParam("id") Long id, ModelMap modelMap
 	                             ) {
@@ -121,7 +133,7 @@ public class CatController {
 	    modelMap.addAttribute("cat", cat);
 	    return "createCategory";
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/updateProduit")
 	public String updateProduit(@ModelAttribute("produit") Produit produit,
 	                             @RequestParam("dateCreation") String date,
@@ -139,13 +151,13 @@ public class CatController {
 	    modelMap.addAttribute("pages", new int[prods.getTotalPages()]);
 	    modelMap.addAttribute("currentPage", page);
 	    modelMap.addAttribute("size", size);
-
-	    return "redirect:/listeProduits";
+	    modelMap.addAttribute("message", "Produit mise a jour correctement");
+	    return "createProduit";
 	}
 	
 	
 	
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/updateCategory")
 	public String updateCat(@ModelAttribute("cat") Categorie updatedCat) {
 		if (updatedCat == null) {
@@ -158,8 +170,8 @@ public class CatController {
 	    categoryService.updateCat(originalCat);
 	    return "redirect:/listeCategories";
 	}
-
-	@RequestMapping("listeCategories")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER')")
+	@RequestMapping("/listeCategories")
 	public String listeCategories(ModelMap modelMap,@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "3") int size) {
 		 Page<Categorie> cats = categoryService.getAllCategoriesParPages(page, size);
@@ -170,8 +182,8 @@ public class CatController {
 		return "listeCategories";
 	}
 	
-	
-	@PostMapping("/filter")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER')")
+	@RequestMapping("/filter")
 	public String filterProduit(
 			ModelMap modelMap,
 			@RequestParam("nomProduit") String nomProduit)
@@ -185,20 +197,25 @@ public class CatController {
 			
 			return "listeProduits";
 		} 
-	
-	@PostMapping("/filterWithCat")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER')")
+	@RequestMapping("/filterWithCat")
 	public String filterCat(
 			ModelMap modelMap,
 			@RequestParam("nomCat") String nomCat)
 			{
+		System.out.println(nomCat);
+		
 			 List<Categorie> cats = categoryService.findByNomCategorie(nomCat);
+			 
 			 if(cats.isEmpty()) {
 				 modelMap.addAttribute("msg","Vous n'avez pas du produit avec ce nom !");
+				
 			 }else {
 				 modelMap.addAttribute("categories", cats);
+				
 			 }
 			
-			return "listeCategories";
+			 return "listeCategories";
 		} 
 	
 }

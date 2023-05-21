@@ -17,9 +17,10 @@ public class ProduitServiceImpl implements ProduitService{
  ProduitRepository produitRepository; 
  
 @Override
-public Produit saveProduit(Produit p) { 
- return produitRepository.save(p); 
- } 
+public Produit saveProduit(Produit produit) {
+    return produitRepository.save(produit);
+}
+
 @Override
 public Produit updateProduit(Produit p) { 
  return produitRepository.save(p); 
