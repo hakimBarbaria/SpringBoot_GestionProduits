@@ -47,21 +47,27 @@ public class CatController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/createCategory")
 	public String createCategory(ModelMap modelMap) {
-		modelMap.addAttribute("cat", new Categorie());
-		return "createCategory";
+	    modelMap.addAttribute("cat", new Categorie());
+	    return "createCategory";
 	}
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/saveCategory")
-	public String saveCategory(Categorie cat, ModelMap modelMap) throws ParseException {
+	public String saveCategory(@ModelAttribute("cat") @Valid Categorie cat, BindingResult bindingResult) throws ParseException {
+	    if (bindingResult.hasErrors()) {
+	        return "createCategory";
+	    }
+	    
+	    Categorie savedCategory = categoryService.saveCategorie(cat);
+	    String msg = "Catégorie enregistrée avec l'ID " + savedCategory.getIdCat();
+	    // Add the success message to the model if needed
+	    // model.addAttribute("msg", msg);
 
-		Categorie savedCategory = categoryService.saveCategorie(cat);
-
-		String msg = "Catégorie enregistrée avec l'ID " + savedCategory.getIdCat();
-		modelMap.addAttribute("msg", msg);
-
-		return "redirect:/listeCategories";
-
+	    return "redirect:/listeCategories";
 	}
+
+
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')")
 	@RequestMapping("/showCreate")
 	public String showCreate(ModelMap modelMap) {
@@ -166,17 +172,20 @@ public class CatController {
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/updateCategory")
-	public String updateCat(@ModelAttribute("cat") Categorie updatedCat) {
-		if (updatedCat == null) {
-			return "listeProduits";
-		}
+	public String updateCat(@ModelAttribute("cat") @Valid Categorie updatedCat, BindingResult bindingResult) {
+	    if (bindingResult.hasErrors()) {
+	        return "createCategory";
+	    }
+	    
 	    Categorie originalCat = categoryService.getCategorie(updatedCat.getIdCat());
 	    originalCat.setIdCat(updatedCat.getIdCat());
 	    originalCat.setNomCat(updatedCat.getNomCat());
 	    originalCat.setDescriptionCat(updatedCat.getDescriptionCat());
 	    categoryService.updateCat(originalCat);
+	    
 	    return "redirect:/listeCategories";
 	}
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER')")
 	@RequestMapping("/listeCategories")
 	public String listeCategories(ModelMap modelMap,@RequestParam(name = "page", defaultValue = "0") int page,

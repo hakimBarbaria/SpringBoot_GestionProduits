@@ -30,13 +30,13 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
 
 
 </h2></u>
-<form th:action="${(cat.nomCat == null) ? 'saveCategory' : 'updateCategory'}" method="post">
+<form th:action="${(cat.idCat == null) ? 'saveCategory' : 'updateCategory'}" method="post">
 <div class="form-group">
  <input type="hidden" name="idCat" class="form-control" placeholder="Entrer un nom du categorie" th:value="${cat.idCat}"/>
 
   <label class="control-label font-weight-bolder">Nom Category :</label>
   <input type="text" name="nomCat" class="form-control" placeholder="Entrer un nom du categorie" th:value="${cat.nomCat}"/>
-<!-- <span th:errors="${category.nomCat}" class="text-danger"> </span> th:value="${category.nomCat}" -->
+ <span th:errors="${cat.nomCat}" class="text-danger"> </span>
 </div>
 
 
@@ -47,7 +47,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.c
     <div class="invalid-feedback">
       Please enter a message in the textarea.
     </div>
-  <!--   <span th:errors="${category.descriptionCat}" class="text-danger"> </span> th:value="${category.descriptionCat}" -->
+     <span th:errors="${cat.descriptionCat}" class="text-danger"> </span>
   </div>
 <div>
 <div th:if="${cat.idCat} == null">
