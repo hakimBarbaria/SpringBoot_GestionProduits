@@ -30,7 +30,7 @@
   </button>
 </div>
 
-                <form th:action="${(produit.idProduit == null) ? 'saveProduit' : 'updateProduit'}" method="post" enctype="multipart/form-data">
+                <form th:action="${(produit.idProduit == null) ? 'saveProduit' : 'updateProduit'}" method="post">
                 <input type="hidden" name="idProduit" class="form-control" placeholder="Entrer un nom du categorie" th:value="${produit.idProduit}"/>
                     <div class="form-group">
                         <label class="control-label font-weight-bolder" for="nomProduit">Nom Produit :</label>

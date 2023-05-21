@@ -75,7 +75,9 @@ public class CatController {
 	public String saveProduit(@Valid Produit produit, BindingResult bindingResult,
 	                          ModelMap modelMap) {
 
-
+		if (bindingResult.hasErrors()) {
+			 return "createProduit";
+			 }
 	    	    Produit savedProduit = produitService.saveProduit(produit);
 	    String msg = "Produit enregistré avec l'ID " + savedProduit.getIdProduit();
 	    modelMap.addAttribute("msg", msg);
@@ -135,17 +137,22 @@ public class CatController {
 	}
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@RequestMapping("/updateProduit")
-	public String updateProduit(@ModelAttribute("produit") Produit produit,
+	public String updateProduit(@ModelAttribute("produit") Produit produit1,
 	                             @RequestParam("dateCreation") String date,
 	                             ModelMap modelMap,
+	                             @Valid Produit produit, BindingResult bindingResult,
 	                             @RequestParam(name = "page", defaultValue = "0") int page,
 	                             @RequestParam(name = "size", defaultValue = "2") int size) throws ParseException {
+		
+		if (bindingResult.hasErrors()) {
+			 return "createProduit";
+			 }
 	    //conversion de la date
 	    SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date dateCreation = dateformat.parse(String.valueOf(date));
 	    produit.setDateCreation(dateCreation);
 
-	    produitService.updateProduit(produit);
+	    produitService.updateProduit(produit1);
 	    Page<Produit> prods = produitService.getAllProduitsParPage(page, size);
 	    modelMap.addAttribute("produits", prods);
 	    modelMap.addAttribute("pages", new int[prods.getTotalPages()]);

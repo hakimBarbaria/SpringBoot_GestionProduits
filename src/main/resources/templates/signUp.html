@@ -11,7 +11,7 @@ layout:decorate="template">
 <div class="container mt-5"> 
 <div class="col-md-6 offset-md-3"> 
 <div class="card"> 
-<div class="card-header">Connexion</div> 
+<div class="card-header">Créer Compte</div> 
 <div class="card-body"> 
 <form action="addUser" method="post"> 
 <div class="alert alert-danger" role="alert" th:text="${msg}" th:if="${msg}">
@@ -27,15 +27,6 @@ layout:decorate="template">
 <div class="form-group"> 
 <label class="control-label" >Confirm Mot de passe :</label> 
 <input type="password" name="passwordC" > 
-</div>
-<div class="form-group"> 
-<label class="control-label" >Role :</label> 
-<select class="custom-select" name="role">
-  <option selected disabled>Open this select menu</option>
-  <option value="ADMIN">ADMIN</option>
-  <option value="USER">USER</option>
-  <option value="EMPLOYEE">EMPLOYEE</option>
-</select>
 </div>
 <button class="btn btn-primary" type="submit">Ajouter un Compte</button> 
 </form>
