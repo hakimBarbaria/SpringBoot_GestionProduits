@@ -31,5 +31,5 @@ jobs:
         tags: latest
         registry: docker.io
         dockerfile: dockerfile.ci
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ "hakimbarbaria" }}
+        password: ${{ "hakimbarbaria123" }}
