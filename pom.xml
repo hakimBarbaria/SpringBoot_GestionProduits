@@ -107,6 +107,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>productsworkflows</finalName>
 	</build>
 
 </project>
