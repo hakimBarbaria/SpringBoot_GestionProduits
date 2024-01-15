@@ -26,7 +26,3 @@ jobs:
 
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
-      with:
-        # Add any required configuration options here
-        # For example, you might need to specify the GitHub token
-        github_token: ${{ secrets.GITHUB_TOKEN }}
