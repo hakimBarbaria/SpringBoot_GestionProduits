@@ -53,6 +53,8 @@ jobs:
         with:
           name: jekyll-site
           path: ./_site
+      - name: Debug - Print page_url
+        run: echo "Page URL:${{ steps.deployment.outputs.page_url }}"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
